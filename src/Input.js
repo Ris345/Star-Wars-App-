@@ -5,10 +5,10 @@ function AddChar() {
     <div>
       <form>
         <input />
-        <button type="button" className="btn btn-info">
+        <button type="button" className="btn btn-success">
           Search
         </button>
-        <button type="button" className="btn btn-warning">
+        <button type="button" className="btn btn-danger">
           Clear
         </button>
       </form>
