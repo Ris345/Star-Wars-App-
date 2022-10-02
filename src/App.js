@@ -27,30 +27,30 @@ function App() {
     getPeople(nextUrl);
   };
 
-  const getPlanets = (url) => {
-    axios.get(url).then((response) => {
-      console.log(response);
-      const planets = response.data.results;
-      console.log(planets);
-      setPlanets(planets);
-    });
-  };
 
-  // const getSpecies = (species) => {
-  //   axios.get(species).then((response) => {
-  //     const species = response.data.name;
-  //     console.log(species)
-  //       setSpecies(species)
-  //     })
-  // };
+  useEffect(() => {
+    async function getPlanets() {
+      const response = await axios("https://swapi.dev/api/planets/")
+      setPlanets(response.data.results)
+    }
+    getPlanets()
+ },[])
 
-  useEffect(() => getPlanets("https://swapi.dev/api/planets/"), []);
-  // useEffect(() => getSpecies(), [])
+  
+  useEffect(() => {
+    async function getSpecies() {
+      const response = await axios("https://swapi.dev/api/species/")
+      setSpecies(response.data.results)
+    }
+    getSpecies()
+  },[])
+  
 
   useEffect(() => getPeople("https://swapi.dev/api/people/"), []);
 
-  const convertObject = [...Object.values(people)];
+  const convertObject = [...Object.values(people,planets,species)];
 
+   
   const populateTable = convertObject.map((keys, index) => {
     return (
       <tr key={keys.id}>
