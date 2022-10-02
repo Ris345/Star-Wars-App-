@@ -11,9 +11,24 @@ populate the first page using map
 step 5 
 populate two remaining headers 
 step 6 
- populate remaining homeworld and species 
-
+ populate table with  remaining homeworld and species 
  step 7
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -115,6 +130,12 @@ step 6
       </tr>
     );
   });
+
+
+
+
+
+
 
 
 

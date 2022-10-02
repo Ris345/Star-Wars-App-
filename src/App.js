@@ -27,37 +27,46 @@ function App() {
     getPeople(nextUrl);
   };
 
-
   useEffect(() => {
     async function getPlanets() {
-      const response = await axios("https://swapi.dev/api/planets/")
-      setPlanets(response.data.results)
+      const response = await axios("https://swapi.dev/api/planets/");
+      setPlanets(response.data.results);
     }
-    getPlanets()
- },[])
+    getPlanets();
+  }, []);
 
-  
   useEffect(() => {
     async function getSpecies() {
-      const response = await axios("https://swapi.dev/api/species/")
-      setSpecies(response.data.results)
+      const response = await axios("https://swapi.dev/api/species/");
+      setSpecies(response.data.results);
     }
-    getSpecies()
-  },[])
-  
+    getSpecies();
+  }, []);
 
   useEffect(() => getPeople("https://swapi.dev/api/people/"), []);
 
-  const convertObject = [...Object.values(people,planets,species)];
+  const convertpeopleObject = [...Object.values(people)];
 
-   
-  const populateTable = convertObject.map((keys, index) => {
+  const convertplanetObject = [...Object.values(planets)];
+
+  const convertspeciesObject = [...Object.values(species)];
+
+  const arrCollecion = [
+    ...convertpeopleObject,
+    ...convertplanetObject,
+    ...convertspeciesObject,
+  ];
+
+ 
+  const populateTable = arrCollecion.map((char, index) => {
     return (
-      <tr key={keys.id}>
-        <td>{keys.name}</td>
-        <td>{keys.birth_year}</td>
-        <td>{keys.height}</td>
-        <td>{keys.mass}</td>
+      <tr key={index} className="table-active">
+        <td>{char.name}</td>
+        <td>{char.birth_year}</td>
+        <td>{char.height}</td>
+        <td>{char.mass}</td>
+        <td>{}</td>
+        <td>{}</td>
         {/* <td>{getPlanets(keys.homeworld)}</td> */}
         {/* <td>{getSpecies(keys.species)}</td> */}
       </tr>
@@ -68,7 +77,7 @@ function App() {
     <div className="table-responsive">
       <Header />
       <AddChar />
-      <table caption="page 1" className="table table-bordered">
+      <table caption="page 1" className="table table-boderless ">
         <tbody className="table-dark">
           <tr>
             <th>Name</th>
