@@ -4,108 +4,62 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import axios from "axios";
 
-// use a different piece of state for each new render page
-// don't need to call a different api everytime!
-// try using async to avoid call back hell !!!
-//
-
 function App() {
-  const [page0, setPage0] = useState([]);
-  const [page1, setPage1] = useState([]);
-  const [page2, setPage2] = useState([]);
-  const [page3, setPage3] = useState([]);
-  const [page4, setPage4] = useState([]);
-  const [page5, setPage5] = useState([]);
-  const [page6, setPage6] = useState([]);
-  const [page7, setPage7] = useState([]);
+  const [people, setPeople] = useState([]);
+  const [nextUrl, setnextUrl] = useState();
+  const [prevUrl, setprevUrl] = useState();
+  const [planets, setPlanets] = useState([]);
+  const [species, setSpecies] = useState([]);
 
-  const getPeople = () => {
-    const url = "https://swapi.dev/api/people/";
-    axios
-      .get(url)
-      .then((response) => {
-        let zeroResponse = response.data.next;
-        const pageZero = response.data.results;
-        setPage0(pageZero);
-        axios.get(zeroResponse).then((response) => {
-          let twoResponse = response.data.next;
-          const pageOne = response.data.results;
-          setPage1(pageOne);
-          axios.get(twoResponse).then((response) => {
-            let threeResponse = response.data.next;
-            const pageTwo = response.data.results;
-            setPage2(pageTwo);
-            axios.get(threeResponse).then((response) => {
-              let fourResponse = response.data.next;
-              const pageThree = response.data.results;
-              setPage3(pageThree);
-              axios.get(fourResponse).then((response) => {
-                let fiveResponse = response.data.next;
-                const pageFour = response.data.results;
-                setPage4(pageFour);
-                axios.get(fiveResponse).then((response) => {
-                  let sixResponse = response.data.next;
-                  const pageFive = response.data.results;
-                  setPage5(pageFive);
-                  axios.get(sixResponse).then((response) => {
-                    let sixResponse = response.data.next;
-                    const pageSix = response.data.results;
-                    setPage6(pageSix);
-                    axios.get(sixResponse).then((response) => {
-                      const pageSix = response.data.results;
-                      setPage7(pageSix);
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const getPeople = (url) => {
+    axios.get(url).then((response) => {
+      setPeople(response.data.results);
+      setnextUrl(response.data.next);
+      setprevUrl(response.data.previous);
+    });
   };
 
-  const getPlanets = (planet) => {
-    axios
-      .get(planet)
-      .then((response) => {
-        const planets = response.data.name;
-        if (planets) {
-          return <td>{planets}</td>;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const getprevPage = () => {
+    getPeople(prevUrl);
+  };
+
+  const getNewPage = () => {
+    getPeople(nextUrl);
+  };
+
+  const getPlanets = (url) => {
+    axios.get(url).then((response) => {
+      console.log(response);
+      const planets = response.data.results;
+      console.log(planets);
+      setPlanets(planets);
+    });
   };
 
   // const getSpecies = (species) => {
-  //   axios
-  //     .get(species)
-  //     .then((response) => {
-  //       const species = response.data.name;
-  //       return species;
+  //   axios.get(species).then((response) => {
+  //     const species = response.data.name;
+  //     console.log(species)
+  //       setSpecies(species)
   //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
   // };
 
-  useEffect(() => getPeople(), []);
+  useEffect(() => getPlanets("https://swapi.dev/api/planets/"), []);
+  // useEffect(() => getSpecies(), [])
 
-  const convert1 = [...Object.values(page0)];
+  useEffect(() => getPeople("https://swapi.dev/api/people/"), []);
 
-  const populateTable = convert1.map((keys, index) => {
+  const convertObject = [...Object.values(people)];
+
+  const populateTable = convertObject.map((keys, index) => {
     return (
       <tr key={keys.id}>
         <td>{keys.name}</td>
         <td>{keys.birth_year}</td>
         <td>{keys.height}</td>
         <td>{keys.mass}</td>
-        <td>{getPlanets(keys.homeworld)}</td>
-        {/* /* <td>{getSpecies(keys.species)}</td> */}
+        {/* <td>{getPlanets(keys.homeworld)}</td> */}
+        {/* <td>{getSpecies(keys.species)}</td> */}
       </tr>
     );
   });
@@ -129,8 +83,13 @@ function App() {
       </table>
       <div className="row">
         <footer className="fixed-bottom">
-          <button className="btn btn-outline-dark btn-sm">prev</button>
-          <button className="btn btn-outline-dark btn-sm float-right">
+          <button className="btn btn-outline-dark btn-sm" onClick={getprevPage}>
+            prev
+          </button>
+          <button
+            className="btn btn-outline-dark btn-sm float-right"
+            onClick={getNewPage}
+          >
             next
           </button>
         </footer>

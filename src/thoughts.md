@@ -10,8 +10,10 @@ step 4
 populate the first page using map
 step 5 
 populate two remaining headers 
+step 6 
+ populate remaining homeworld and species 
 
-
+ step 7
 
 
 
@@ -110,6 +112,82 @@ populate two remaining headers
         <td>{keys.mass}</td>
         <td>{getPlanets(keys.homeworld)}</td>
         <td>{keys.species}</td>
+      </tr>
+    );
+  });
+
+
+
+
+
+
+const getPlanets = (url) => {
+    axios.get(url).then((response) => {   
+      console.log(response.data.results)
+      setPlanets(response.data.name);
+    });
+  };
+
+console.log(planets)
+  const getSpecies = (species) => {
+    axios.get(species).then((response) => {
+        console.log(response)
+        setSpecies(species)
+      })
+  };
+
+  useEffect(() => getPlanets("https://swapi.dev/api/planets/"), []);
+  // useEffect(() => getSpecies(), [])
+
+  useEffect(() => getPeople("https://swapi.dev/api/people/"), []);
+
+
+
+
+const getPeople = (url) => {
+    axios.get(url).then((response) => {
+      setPeople(response.data.results);
+      setnextUrl(response.data.next);
+      setprevUrl(response.data.previous);
+    });
+  };
+
+  const getprevPage = () => {
+    getPeople(prevUrl);
+  };
+
+  const getNewPage = () => {
+    getPeople(nextUrl);
+  };
+
+  const getPlanets = (url) => {
+    axios.get(url).then((response) => {
+      setPlanets(response.data.results);
+    });
+  };
+
+  const getSpecies = (species) => {
+    axios.get(species).then((response) => {
+      console.log(response);
+      setSpecies(species);
+    });
+  };
+
+  useEffect(() => getPlanets("https://swapi.dev/api/planets/"), []);
+
+  useEffect(() => getPeople("https://swapi.dev/api/people/"), []);
+
+  const convertObject = [...Object.values(people)];
+
+  const populateTable = convertObject.map((keys, index) => {
+    return (
+      <tr key={keys.id}>
+        <td>{keys.name}</td>
+        <td>{keys.birth_year}</td>
+        <td>{keys.height}</td>
+        <td>{keys.mass}</td>
+        {/* <td>{getPlanets(keys.homeworld)}</td> */}
+        {/* <td>{getSpecies(keys.species)}</td> */}
       </tr>
     );
   });
