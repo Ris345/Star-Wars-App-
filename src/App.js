@@ -19,10 +19,10 @@ function App() {
         let planetUrl = response.data.results[i].homeworld;
         console.log(planetUrl);
         //getPlanet(planetUrl);
-        axios.get(planetUrl).then((response) => {
-          response.data.results = response.data.name
-          console.log(response.data.name)
-          // setPlanets(response.data.name);
+        axios.get(planetUrl).then((resp) => {
+          response.data.results[i].homeworld = resp.data.name
+          console.log('resp;', response.data.results[i].homeworld)
+          //setPlanets(response.data.name);
           // console.log(response.data.name);
         });
       }
@@ -35,8 +35,7 @@ function App() {
       setprevUrl(response.data.previous);
     });
   };
-  console.log(planets);
-  console.log(people);
+ console.log('people: ', people)
 
   const getprevPage = () => {
     getPeople(prevUrl);
@@ -91,7 +90,7 @@ function App() {
           <td>{char.birth_year}</td>
           <td>{char.height}</td>
           <td>{char.mass}</td>
-          <td>{}</td>
+          <td>{char.homeworld}</td>
           <td>{}</td>
           {/* <td>{getPlanets(char.homeworld)}</td> */}
           {/* <td>{getSpecies(keys.species)}</td> */}
