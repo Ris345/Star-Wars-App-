@@ -15,10 +15,16 @@ step 6
  step 7
 
 
+steps to fix the homeworld problem 
 
 
-
-
+step 1 
+ loop through each character 
+step 2 
+  make a http request with homeworld object
+  just make a http get request from the characters object.....
+step 3 
+ 
 
 
 

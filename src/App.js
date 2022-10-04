@@ -5,6 +5,7 @@ import Header from "./Header";
 import axios from "axios";
 
 function App() {
+  debugger;
   const [people, setPeople] = useState([]);
   const [nextUrl, setnextUrl] = useState();
   const [prevUrl, setprevUrl] = useState();
@@ -13,11 +14,29 @@ function App() {
 
   const getPeople = (url) => {
     axios.get(url).then((response) => {
+      console.log(response);
+      //0response.data.results.homeworld = 'Tatooine'
+      //loop through each character
+      for (let i = 0; i < people.length; i++) {
+        let planetUrl = response.data.results[i].homeworld;
+        console.log(planetUrl);
+        //getPlanet(planetUrl);
+        axios.get(planetUrl).then((response) => {
+          setPlanets(response.data.name);
+          console.log(planets);
+        });
+      }
+
+      // make an HTTP request for the characters homeworld
+
+      // set the characters homeworld name property based on the data that comes back
       setPeople(response.data.results);
       setnextUrl(response.data.next);
       setprevUrl(response.data.previous);
     });
   };
+  console.log(planets);
+  console.log(people);
 
   const getprevPage = () => {
     getPeople(prevUrl);
@@ -27,49 +46,57 @@ function App() {
     getPeople(nextUrl);
   };
 
-  useEffect(() => {
-    async function getPlanets() {
-      const response = await axios("https://swapi.dev/api/planets/");
-      setPlanets(response.data.results);
-    }
-    getPlanets();
-  }, []);
+  // async function getPlanet(planetUrl) {
+  //   const response = await axios(planetUrl);
+  //   return response.data.name;
 
-  useEffect(() => {
-    async function getSpecies() {
-      const response = await axios("https://swapi.dev/api/species/");
-      setSpecies(response.data.results);
-    }
-    getSpecies();
-  }, []);
+  //     }
+
+  // useEffect(() => {
+  //   async function getPlanets() {
+  //     const response = await axios("https://swapi.dev/api/planets/");
+  //     setPlanets(response.data.name);
+  //     console.log(response.data.name)
+  //   }
+  //   getPlanets();
+  // }, []);
+
+  // useEffect(() => {
+  //   async function getSpecies() {
+  //     const response = await axios("https://swapi.dev/api/species/");
+  //     setSpecies(response.data.results);
+  //   }
+  //   getSpecies();
+  // }, []);
 
   useEffect(() => getPeople("https://swapi.dev/api/people/"), []);
 
   const convertpeopleObject = [...Object.values(people)];
 
-  const convertplanetObject = [...Object.values(planets)];
+  // const convertplanetObject = [...Object.values(planets)];
 
-  const convertspeciesObject = [...Object.values(species)];
+  // const convertspeciesObject = [...Object.values(species)];
 
-  const arrCollecion = [
-    ...convertpeopleObject,
-    ...convertplanetObject,
-    ...convertspeciesObject,
-  ];
+  // const arrCollecion = [
+  //   ...convertpeopleObject,
+  //   ...convertplanetObject,
+  //   ...convertspeciesObject,
+  // ];
 
- 
-  const populateTable = arrCollecion.map((char, index) => {
+  const populateTable = convertpeopleObject.map((char, index) => {
     return (
-      <tr key={index} className="table-active">
-        <td>{char.name}</td>
-        <td>{char.birth_year}</td>
-        <td>{char.height}</td>
-        <td>{char.mass}</td>
-        <td>{}</td>
-        <td>{}</td>
-        {/* <td>{getPlanets(keys.homeworld)}</td> */}
-        {/* <td>{getSpecies(keys.species)}</td> */}
-      </tr>
+      <tbody key={index}>
+        <tr key={index}>
+          <td>{char.name}</td>
+          <td>{char.birth_year}</td>
+          <td>{char.height}</td>
+          <td>{char.mass}</td>
+          <td>{}</td>
+          <td>{}</td>
+          {/* <td>{getPlanets(char.homeworld)}</td> */}
+          {/* <td>{getSpecies(keys.species)}</td> */}
+        </tr>
+      </tbody>
     );
   });
 
@@ -77,7 +104,7 @@ function App() {
     <div className="table-responsive">
       <Header />
       <AddChar />
-      <table caption="page 1" className="table table-boderless ">
+      <table caption="page 1" className="table table-bordered border-dark">
         <tbody className="table-dark">
           <tr>
             <th>Name</th>
