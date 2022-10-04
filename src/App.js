@@ -4,38 +4,39 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import axios from "axios";
 
-function App() { 
+function App() {
   const [people, setPeople] = useState([]);
   const [nextUrl, setnextUrl] = useState();
   const [prevUrl, setprevUrl] = useState();
-  const [planets, setPlanets] = useState([]);
-  const [species, setSpecies] = useState([]);
 
   const getPeople = (url) => {
-    axios.get(url).then((response) => {
-      //0response.data.results.homeworld = 'Tatooine'
+    axios.get(url).then(async (response) => {
       //loop through each character
-      for (let i = 0; i < people.length; i++) {
+      for (let i = 0; i < response.data.results.length; i++) {
         let planetUrl = response.data.results[i].homeworld;
-        console.log(planetUrl);
-        //getPlanet(planetUrl);
+        let speciesUrl = response.data.results[i].species;
+        // make an HTTP request for the characters homeworld
         axios.get(planetUrl).then((resp) => {
-          response.data.results[i].homeworld = resp.data.name
-          console.log('resp;', response.data.results[i].homeworld)
-          //setPlanets(response.data.name);
-          // console.log(response.data.name);
+          // set the characters homeworld name property based on the data that comes back
         });
+        axios.get(speciesUrl).then((rsp) => {});
+
+        const resp = await axios.get(planetUrl);
+        response.data.results[i].homeworld = resp.data.name;
+        const rsp = await axios.get(speciesUrl);
+        if (!rsp.data.name) {
+          response.data.results[i].species = "Human";
+        } else {
+          response.data.results[i].species = rsp.data.name;
+        }
       }
 
-      // make an HTTP request for the characters homeworld
-
-      // set the characters homeworld name property based on the data that comes back
       setPeople(response.data.results);
       setnextUrl(response.data.next);
       setprevUrl(response.data.previous);
     });
   };
- console.log('people: ', people)
+  console.log("people: ", people);
 
   const getprevPage = () => {
     getPeople(prevUrl);
@@ -45,42 +46,9 @@ function App() {
     getPeople(nextUrl);
   };
 
-  // async function getPlanet(planetUrl) {
-  //   const response = await axios(planetUrl);
-  //   return response.data.name;
-
-  //     }
-
-  // useEffect(() => {
-  //   async function getPlanets() {
-  //     const response = await axios("https://swapi.dev/api/planets/");
-  //     setPlanets(response.data.name);
-  //     console.log(response.data.name)
-  //   }
-  //   getPlanets();
-  // }, []);
-
-  // useEffect(() => {
-  //   async function getSpecies() {
-  //     const response = await axios("https://swapi.dev/api/species/");
-  //     setSpecies(response.data.results);
-  //   }
-  //   getSpecies();
-  // }, []);
-
   useEffect(() => getPeople("https://swapi.dev/api/people/"), []);
 
   const convertpeopleObject = [...Object.values(people)];
-
-  // const convertplanetObject = [...Object.values(planets)];
-
-  // const convertspeciesObject = [...Object.values(species)];
-
-  // const arrCollecion = [
-  //   ...convertpeopleObject,
-  //   ...convertplanetObject,
-  //   ...convertspeciesObject,
-  // ];
 
   const populateTable = convertpeopleObject.map((char, index) => {
     return (
@@ -91,9 +59,7 @@ function App() {
           <td>{char.height}</td>
           <td>{char.mass}</td>
           <td>{char.homeworld}</td>
-          <td>{}</td>
-          {/* <td>{getPlanets(char.homeworld)}</td> */}
-          {/* <td>{getSpecies(keys.species)}</td> */}
+          <td>{char.species}</td>
         </tr>
       </tbody>
     );
