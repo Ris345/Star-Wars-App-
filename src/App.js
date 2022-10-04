@@ -4,8 +4,7 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import axios from "axios";
 
-function App() {
-  debugger;
+function App() { 
   const [people, setPeople] = useState([]);
   const [nextUrl, setnextUrl] = useState();
   const [prevUrl, setprevUrl] = useState();
@@ -14,7 +13,6 @@ function App() {
 
   const getPeople = (url) => {
     axios.get(url).then((response) => {
-      console.log(response);
       //0response.data.results.homeworld = 'Tatooine'
       //loop through each character
       for (let i = 0; i < people.length; i++) {
@@ -22,8 +20,10 @@ function App() {
         console.log(planetUrl);
         //getPlanet(planetUrl);
         axios.get(planetUrl).then((response) => {
-          setPlanets(response.data.name);
-          console.log(planets);
+          response.data.results = response.data.name
+          console.log(response.data.name)
+          // setPlanets(response.data.name);
+          // console.log(response.data.name);
         });
       }
 
