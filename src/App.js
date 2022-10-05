@@ -1,26 +1,22 @@
 import "./App.css";
-import AddChar from "./Input";
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import axios from "axios";
+
 
 function App() {
   const [people, setPeople] = useState([]);
   const [nextUrl, setnextUrl] = useState();
   const [prevUrl, setprevUrl] = useState();
+  const [incoming, setIncoming] = useState()
 
   const getPeople = (url) => {
     axios.get(url).then(async (response) => {
-      //loop through each character
       for (let i = 0; i < response.data.results.length; i++) {
         let planetUrl = response.data.results[i].homeworld;
         let speciesUrl = response.data.results[i].species;
-        // make an HTTP request for the characters homeworld
-        axios.get(planetUrl).then((resp) => {
-          // set the characters homeworld name property based on the data that comes back
-        });
+        axios.get(planetUrl).then((resp) => {});
         axios.get(speciesUrl).then((rsp) => {});
-
         const resp = await axios.get(planetUrl);
         response.data.results[i].homeworld = resp.data.name;
         const rsp = await axios.get(speciesUrl);
@@ -30,14 +26,31 @@ function App() {
           response.data.results[i].species = rsp.data.name;
         }
       }
-
       setPeople(response.data.results);
       setnextUrl(response.data.next);
       setprevUrl(response.data.previous);
     });
   };
-  console.log("people: ", people);
 
+  const updateForm = (e) => {
+    let incomingMatch = e.target.value
+    setIncoming(incomingMatch)
+     console.log(incoming)
+    
+   }
+
+  const Searchchar = (e) => {
+    e.preventDefault();
+    console.log(typeof people)
+    console.log(typeof incoming)
+    for (let i = 0; i < people.length; i++){
+      console.log(people[i])
+    }
+    // if (people.inludes(incoming)) {
+    //   console.log('true')
+    // }
+  };
+  
   const getprevPage = () => {
     getPeople(prevUrl);
   };
@@ -49,6 +62,7 @@ function App() {
   useEffect(() => getPeople("https://swapi.dev/api/people/"), []);
 
   const convertpeopleObject = [...Object.values(people)];
+  
 
   const populateTable = convertpeopleObject.map((char, index) => {
     return (
@@ -56,10 +70,11 @@ function App() {
         <tr key={index}>
           <td>{char.name}</td>
           <td>{char.birth_year}</td>
-          <td>{char.height}</td>
-          <td>{char.mass}</td>
+          <td>{char.height}cm</td>
+          <td>{char.mass}kg</td>
           <td>{char.homeworld}</td>
           <td>{char.species}</td>
+          {/* <td>{char.films}</td> */}
         </tr>
       </tbody>
     );
@@ -68,7 +83,16 @@ function App() {
   return (
     <div className="table-responsive">
       <Header />
-      <AddChar />
+      {/* <AddChar /> */}
+      <form>
+        <input onChange={updateForm} />
+        <button type="submit" className="btn btn-success" onClick={Searchchar}>
+          Search
+        </button>
+        <button type="submit" className="btn btn-danger">
+          Clear
+        </button>
+      </form>
       <table caption="page 1" className="table table-bordered border-dark">
         <tbody className="table-dark">
           <tr>
@@ -78,6 +102,7 @@ function App() {
             <th>Mass</th>
             <th>Homeworld</th>
             <th>Species</th>
+            {/* <th>Movies</th> */}
           </tr>
         </tbody>
         {populateTable}

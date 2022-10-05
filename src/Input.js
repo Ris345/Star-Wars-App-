@@ -1,19 +1,17 @@
-import React from "react";
+// import React from "react";
 
-function AddChar() {
-  return (
-    <div>
-      <form>
-        <input />
-        <button type="button" className="btn btn-success">
-          Search
-        </button>
-        <button type="button" className="btn btn-danger">
-          Clear
-        </button>
-      </form>
-    </div>
-  );
-}
+// function AddChar() {
 
-export default AddChar;
+//   function Search(e) {
+//     e.preventDefault();
+//     console.log('test')
+//   }
+//   return (
+//     <div>
+      
+//     </div>
+//   );
+// }
+
+// export default AddChar;
+// /

@@ -29,7 +29,17 @@ step 3
 
 
 
-
+steps for search button 
+step 1 
+ user type something in the input box 
+step 2 
+ user clicks the search button 
+step 3 
+ if search item matches 
+  return resuls 
+  else 
+  no action 
+ 
 
 
 
