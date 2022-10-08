@@ -40,6 +40,9 @@ function App() {
     axios
       .get(`https://swapi.dev/api/people/?search=${userInput}`)
       .then(async (rp) => {
+        if (!rp) {
+          setPeople("Invalid input try again!");
+        }
         for (let i = 0; i < rp.data.results.length; i++) {
           let planetUrl = rp.data.results[i].homeworld;
           let speciesUrl = rp.data.results[i].species;
@@ -58,7 +61,7 @@ function App() {
       });
   };
 
-  console.log("userinput:", userInput);
+  //console.log("userinput:", userInput);
 
   const getprevPage = () => {
     getPeople(prevUrl);
@@ -67,17 +70,6 @@ function App() {
   const getNewPage = () => {
     getPeople(nextUrl);
   };
-
-  // useEffect(() => {
-  //   const swapiData = localStorage.getItem("char-list");
-  //   if (swapiData) {
-  //     setPeople(JSON.parse(swapiData));
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   localStorage.setItem("char-list", JSON.stringify(people));
-  // }, []);
 
   useEffect(() => getPeople("https://swapi.dev/api/people/"), []);
 
@@ -100,14 +92,19 @@ function App() {
   });
 
   return (
-    <div className="table-responsive">
+    <div className="table-responsive p-3 mb-2 bg-light text-dark">
       <Header />
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        onReset={() => {
+          getPeople("https://swapi.dev/api/people/");
+        }}
+      >
         <input onChange={updateForm} />
         <button type="submit" className="btn btn-outline-primary">
           Search
         </button>
-        <button type="reset" className="btn btn-outline-warning">
+        <button type="reset" className="btn btn-outline-danger">
           Clear
         </button>
       </form>

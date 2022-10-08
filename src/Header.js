@@ -3,7 +3,7 @@
 function Header() {
   return (
     <header>
-      <h1> Character Search</h1>
+      <h1> Character Search </h1>
     </header>
   );
 }
