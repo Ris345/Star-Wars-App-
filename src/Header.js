@@ -1,9 +1,9 @@
-
+import pic from "./pic.png";
 
 function Header() {
   return (
     <header>
-      <h1> Character Search </h1>
+      <img src={pic} alt="Star Wars" />
     </header>
   );
 }
