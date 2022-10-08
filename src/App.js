@@ -61,7 +61,6 @@ function App() {
       });
   };
 
-  //console.log("userinput:", userInput);
 
   const getprevPage = () => {
     getPeople(prevUrl);
