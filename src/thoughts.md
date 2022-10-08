@@ -43,6 +43,45 @@ step 3
 
 
 
+step 1 
+ // type a char name 
+step 2 
+ // click the search button 
+step 3 
+ char matches return the array associated with char 
+ each page a unique id 
+ if the word matches the name 
+  because each array has a unique name 
+  just return that aray with a unque name 
+  then return that array...
+  then return that array....
+step 4 
+
+
+test case 1
+ // type luke skywalker 
+ expected: luke sykwalker info 
+ // actual: all people show up 
+
+
+question with this is how do I match the name and get the matching id. 
+
+
+const charSearch = people.filter(function (userInput, name) {
+      if (userInput.includes(name)) {
+       //return the id that matches the name 
+        console.log('true')
+      } else {
+         console.log('false')
+      }
+
+
+
+
+
+
+
+
 
 
 

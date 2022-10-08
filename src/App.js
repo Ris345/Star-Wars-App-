@@ -3,12 +3,11 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import axios from "axios";
 
-
 function App() {
   const [people, setPeople] = useState([]);
   const [nextUrl, setnextUrl] = useState();
   const [prevUrl, setprevUrl] = useState();
-  const [incoming, setIncoming] = useState()
+  const [userInput, setuserInput] = useState();
 
   const getPeople = (url) => {
     axios.get(url).then(async (response) => {
@@ -33,24 +32,34 @@ function App() {
   };
 
   const updateForm = (e) => {
-    let incomingMatch = e.target.value
-    setIncoming(incomingMatch)
-     console.log(incoming)
-    
-   }
-
-  const Searchchar = (e) => {
-    e.preventDefault();
-    console.log(typeof people)
-    console.log(typeof incoming)
-    for (let i = 0; i < people.length; i++){
-      console.log(people[i])
-    }
-    // if (people.inludes(incoming)) {
-    //   console.log('true')
-    // }
+    setuserInput(e.target.value);
   };
-  
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .get(`https://swapi.dev/api/people/?search=${userInput}`)
+      .then(async (rp) => {
+        for (let i = 0; i < rp.data.results.length; i++) {
+          let planetUrl = rp.data.results[i].homeworld;
+          let speciesUrl = rp.data.results[i].species;
+          axios.get(planetUrl).then((resp) => {});
+          axios.get(speciesUrl).then((rsp) => {});
+          const resp = await axios.get(planetUrl);
+          rp.data.results[i].homeworld = resp.data.name;
+          const rsp = await axios.get(speciesUrl);
+          if (!rsp.data.name) {
+            rp.data.results[i].species = "Human";
+          } else {
+            rp.data.results[i].species = rsp.data.name;
+          }
+        }
+        setPeople(rp.data.results);
+      });
+  };
+
+  console.log("userinput:", userInput);
+
   const getprevPage = () => {
     getPeople(prevUrl);
   };
@@ -59,10 +68,20 @@ function App() {
     getPeople(nextUrl);
   };
 
+  // useEffect(() => {
+  //   const swapiData = localStorage.getItem("char-list");
+  //   if (swapiData) {
+  //     setPeople(JSON.parse(swapiData));
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   localStorage.setItem("char-list", JSON.stringify(people));
+  // }, []);
+
   useEffect(() => getPeople("https://swapi.dev/api/people/"), []);
 
   const convertpeopleObject = [...Object.values(people)];
-  
 
   const populateTable = convertpeopleObject.map((char, index) => {
     return (
@@ -83,13 +102,12 @@ function App() {
   return (
     <div className="table-responsive">
       <Header />
-      {/* <AddChar /> */}
-      <form>
+      <form onSubmit={handleSubmit}>
         <input onChange={updateForm} />
-        <button type="submit" className="btn btn-success" onClick={Searchchar}>
+        <button type="submit" className="btn btn-outline-primary">
           Search
         </button>
-        <button type="submit" className="btn btn-danger">
+        <button type="reset" className="btn btn-outline-warning">
           Clear
         </button>
       </form>
@@ -102,7 +120,6 @@ function App() {
             <th>Mass</th>
             <th>Homeworld</th>
             <th>Species</th>
-            {/* <th>Movies</th> */}
           </tr>
         </tbody>
         {populateTable}
