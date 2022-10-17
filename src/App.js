@@ -1,11 +1,14 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
+import Header from "./components/Header";
 import axios from "axios";
+import FormInput from "./components/FormInput";
+import TableView from "./components/TableView";
+import Footer from "./components/Footer";
 
 function App() {
   const [people, setPeople] = useState([]);
-  const [nextUrl, setnextUrl] = useState();
+  const [nextUrl, setNextUrl] = useState();
   const [prevUrl, setprevUrl] = useState();
   const [userInput, setuserInput] = useState();
 
@@ -26,7 +29,7 @@ function App() {
         }
       }
       setPeople(response.data.results);
-      setnextUrl(response.data.next);
+      setNextUrl(response.data.next);
       setprevUrl(response.data.previous);
     });
   };
@@ -61,12 +64,11 @@ function App() {
       });
   };
 
-
   const getprevPage = () => {
     getPeople(prevUrl);
   };
 
-  const getNewPage = () => {
+  const getNextPage = () => {
     getPeople(nextUrl);
   };
 
@@ -93,46 +95,13 @@ function App() {
   return (
     <div className="table-responsive p-3 mb-2 bg-light text-dark">
       <Header />
-      <form
-        onSubmit={handleSubmit}
-        onReset={() => {
-          getPeople("https://swapi.dev/api/people/");
-        }}
-      >
-        <input onChange={updateForm} />
-        <button type="submit" className="btn btn-outline-primary">
-          Search
-        </button>
-        <button type="reset" className="btn btn-outline-danger">
-          Clear
-        </button>
-      </form>
-      <table caption="page 1" className="table table-bordered border-dark">
-        <tbody className="table-dark">
-          <tr>
-            <th>Name</th>
-            <th>Birth Date</th>
-            <th>Height</th>
-            <th>Mass</th>
-            <th>Homeworld</th>
-            <th>Species</th>
-          </tr>
-        </tbody>
-        {populateTable}
-      </table>
-      <div className="row">
-        <footer className="fixed-bottom">
-          <button className="btn btn-outline-dark btn-sm" onClick={getprevPage}>
-            prev
-          </button>
-          <button
-            className="btn btn-outline-dark btn-sm float-right"
-            onClick={getNewPage}
-          >
-            next
-          </button>
-        </footer>
-      </div>
+      <FormInput
+        handleSubmit={handleSubmit}
+        getPeople={getPeople}
+        updateForm={updateForm}
+      />
+      <TableView populateTable={populateTable} />
+      <Footer nextUrl={nextUrl} prevUrl={prevUrl} getprevPage={getprevPage} getNextPage={getNextPage} />
     </div>
   );
 }
