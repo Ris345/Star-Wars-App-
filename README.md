@@ -2,8 +2,7 @@
 
 ### Star Wars API app made with JavaScript, HTML, CSS, React and Bootstrap.
 
-![App Picture](./StarWars.png\)
-
+![App Picture](./StarWars.png/)
 
 [Click here for the app](https://magenta-crisp-21b3fc.netlify.app)
 
