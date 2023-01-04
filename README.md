@@ -1,6 +1,6 @@
 # Star Wars API
 
-### Star Wars API app made with JavaScript, HTML, CSS, React and Bootstrap.
+### Star Wars API app made with JavaScript, React and Bootstrap.
 
 ![App Picture](./StarWars.gif)
 
