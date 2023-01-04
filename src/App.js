@@ -11,9 +11,13 @@ function App() {
   const [nextUrl, setNextUrl] = useState();
   const [prevUrl, setprevUrl] = useState();
   const [userInput, setuserInput] = useState();
+  const [loading, setLoading] = useState(false);
+
 
   const getPeople = (url) => {
+    
     axios.get(url).then(async (response) => {
+      setLoading(true)
       for (let i = 0; i < response.data.results.length; i++) {
         let planetUrl = response.data.results[i].homeworld;
         let speciesUrl = response.data.results[i].species;
@@ -31,6 +35,11 @@ function App() {
       setPeople(response.data.results);
       setNextUrl(response.data.next);
       setprevUrl(response.data.previous);
+      if (people) {
+        setLoading(false)
+      } else {
+         setLoading(true)
+      }
     });
   };
 
@@ -86,7 +95,6 @@ function App() {
           <td>{char.mass}kg</td>
           <td>{char.homeworld}</td>
           <td>{char.species}</td>
-          {/* <td>{char.films}</td> */}
         </tr>
       </tbody>
     );
@@ -102,6 +110,7 @@ function App() {
       />
       <TableView populateTable={populateTable} />
       <Footer nextUrl={nextUrl} prevUrl={prevUrl} getprevPage={getprevPage} getNextPage={getNextPage} />
+      {loading && <div>Loading..</div>}
     </div>
   );
 }

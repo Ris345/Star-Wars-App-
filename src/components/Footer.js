@@ -33,11 +33,11 @@ function Footer({ nextUrl, prevUrl, getprevPage, getNextPage }) {
 
   return (
     <div>
-          <div className="row">
-              <footer className="fixed-bottom">
-                  {prevPageButton}
-                  {nextPageButton}
-              </footer>
+      <div className="row">
+        <footer className="fixed-bottom">
+          {prevPageButton}
+          {nextPageButton}
+        </footer>
       </div>
     </div>
   );
